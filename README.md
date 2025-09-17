@@ -1,5 +1,8 @@
 # Habit Tracker (Python, SQLite, SQLAlchemy)
 
+> This project was developed as part of the IU module  
+> *Object-Oriented and Functional Programming with Python (DLBDSOOFPP01)* – Phase 2.
+
 A small, robust habit tracker with clear domain logic, daily/weekly period handling, streak analytics, and a simple CLI.  
 Data is persisted in SQLite via SQLAlchemy 2.0.
 
@@ -111,3 +114,4 @@ Delete or rename habits (with cascade in checks)
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
