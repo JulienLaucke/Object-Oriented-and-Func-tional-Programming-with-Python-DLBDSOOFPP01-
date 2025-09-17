@@ -53,9 +53,10 @@ python -m habits.cli streak-all
 python -m habits.cli export-habits --format json --path export/habits.json
 python -m habits.cli export-checks --format csv  --path export/checks.csv
 python -m habits.cli export-checks --format json --path export/checks_drink.json --name "Drink water"
+```
 
-Usage
-
+## Usage
+```bash
 All commands are run from the project root:
 
 # Add and list
@@ -82,9 +83,9 @@ python -m habits.cli export-checks --format json --path export/checks_drink.json
 
 
 All data is stored in habits.db (SQLite file in the project root).
-
-Design Decisions
-
+```
+## Design Decisions
+```bash
 UTC-only timestamps → avoids timezone/DST issues
 
 Period start as key (00:00 or Monday 00:00) → ensures idempotent checks (UNIQUE(habit_id, period_start))
@@ -100,13 +101,13 @@ models.py → ORM tables
 repo.py → repository with business logic
 
 cli.py → command line interface
-
-Tests
+```
+## Tests
 
 Run the unit tests with:
-
+```bash
 pytest -q
-
+```
 
 Sample tests are included in tests/test_core.py and cover:
 
@@ -116,12 +117,13 @@ Period bounds (daily, weekly)
 
 Longest streak calculation
 
-Roadmap
+## Roadmap
 
 Delete or rename habits (with cascade in checks)
 
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
 
 
