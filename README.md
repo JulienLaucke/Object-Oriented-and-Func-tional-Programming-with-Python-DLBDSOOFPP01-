@@ -87,13 +87,28 @@ All data is stored in habits.db (SQLite file in the project root).
 
 ## Example Output
 
-Habit list and streak calculation via CLI:
+### Habit creation and list
+![CLI Screenshot](Images/python_ht.png)
 
-![CLI Screenshot](docs/example_cli.png)
+The output shows:
+- Two new habits created (daily & weekly)  
+- List of all habits with periodicity and timestamps  
 
-The output shows two habits added (daily & weekly), the check-off of one, and the display of due items and the longest streak.
+### Check-off and due
+![CLI Screenshot](Images/python_ht3.png)
 
+The output shows:
+- One habit checked off for the current period  
+- Due command listing pending habits
 
+### Streak analytics
+![CLI Screenshot](Images/python_ht2.png)
+
+The output shows:
+- Longest streak for a single habit  
+- Best overall streak across all habits
+
+  
 ## Design Decisions
 ```bash
 UTC-only timestamps → avoids timezone/DST issues
@@ -134,6 +149,7 @@ Delete or rename habits (with cascade in checks)
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
 
 
 
