@@ -91,6 +91,9 @@ Habit list and streak calculation via CLI:
 
 ![CLI Screenshot](docs/example_cli.png)
 
+The output shows two habits added (daily & weekly), the check-off of one, and the display of due items and the longest streak.
+
+
 ## Design Decisions
 ```bash
 UTC-only timestamps → avoids timezone/DST issues
@@ -131,6 +134,7 @@ Delete or rename habits (with cascade in checks)
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
 
 
 
