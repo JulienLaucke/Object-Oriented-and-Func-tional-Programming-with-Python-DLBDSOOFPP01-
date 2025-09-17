@@ -84,6 +84,13 @@ python -m habits.cli export-checks --format json --path export/checks_drink.json
 
 All data is stored in habits.db (SQLite file in the project root).
 ```
+
+## Example Output
+
+Habit list and streak calculation via CLI:
+
+![CLI Screenshot](docs/example_cli.png)
+
 ## Design Decisions
 ```bash
 UTC-only timestamps → avoids timezone/DST issues
@@ -124,6 +131,7 @@ Delete or rename habits (with cascade in checks)
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
 
 
 
