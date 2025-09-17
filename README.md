@@ -6,6 +6,15 @@
 A small, robust habit tracker with clear domain logic, daily/weekly period handling, streak analytics, and a simple CLI.  
 Data is persisted in SQLite via SQLAlchemy 2.0.
 
+## Table of Contents
+- [Features](#features)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Example Output](#example-output)
+- [Tests](#tests)
+- [Roadmap](#roadmap)
+
+
 ---
 
 ## Features
@@ -114,4 +123,5 @@ Delete or rename habits (with cascade in checks)
 Summary analytics (show streak for every habit)
 
 Optional GUI (Streamlit dashboard)
+
 
