@@ -6,7 +6,8 @@ from typing import Optional
 from .repo import HabitRepo, utcnow
 
 def parse_iso(ts_str: Optional[str]) -> Optional[datetime]:
-    """Parse 'YYYY-MM-DD[ T]HH:MM:SS' to datetime, or None if not provided."""
+    """Parse 'YYYY-MM-DD[ T]HH:MM:SS' to datetime, or None if not provided.
+       Habit Tracker (SQLite + SQLAlchemy) now with delete/rename/summary"""
     if not ts_str:
         return None
     return datetime.fromisoformat(ts_str.replace(" ", "T"))
@@ -55,6 +56,19 @@ def main():
     p_exp_c.add_argument("--format", choices=["json", "csv"], required=True)
     p_exp_c.add_argument("--path", required=True)
     p_exp_c.add_argument("--name", help="optional habit name filter")
+
+    # delete
+    p_del = sub.add_parser("delete", help="delete a habit (cascades checks)")
+    p_del.add_argument("name", type=str)
+
+    # rename
+    p_ren = sub.add_parser("rename", help="rename a habit")
+    p_ren.add_argument("old_name", type=str)
+    p_ren.add_argument("new_name", type=str)
+
+    # summary
+    sub.add_parser("summary", help="show streak summary for all habits")
+
 
     args = parser.parse_args()
     repo = HabitRepo()
@@ -117,6 +131,28 @@ def main():
     elif args.cmd == "export-checks":
         out = repo.export_checks_json(args.path, name=args.name) if args.format == "json" else repo.export_checks_csv(args.path, name=args.name)
         print(f"Exported checks → {out}")
+
+    elif args.cmd == "delete":
+        try:
+            repo.delete_habit(args.name)
+            print(f"Habit '{args.name}' deleted.")
+        except KeyError as e:
+            print(e)
+
+    elif args.cmd == "rename":
+        try:
+            h = repo.rename_habit(args.old_name, args.new_name)
+            print(f"Habit renamed to: {h.name}")
+        except (KeyError, ValueError) as e:
+            print(e)
+
+    elif args.cmd == "summary":
+        summary = repo.summary_streaks()
+        if not summary:
+            print("No habits yet.")
+        else:
+            for name, s in summary:
+                print(f"- {name:20} | streak {s}")
 
 if __name__ == "__main__":
     main()
