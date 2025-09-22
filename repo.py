@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from .db import SessionLocal, create_schema
 from .models import HabitORM, CheckORM, Periodicity
 
-# ---------- Time & period helpers ----------
+# helpers
 def utcnow() -> datetime:
     return datetime.utcnow()
 
@@ -55,7 +55,7 @@ def longest_streak_for_habit(period_starts: Iterable[datetime], step: timedelta)
         prev = p
     return longest
 
-# ---------- Export helpers ----------
+# Export helpers
 import json, csv
 from pathlib import Path
 
@@ -70,7 +70,7 @@ def _ensure_parent(path: str | Path) -> Path:
     p.parent.mkdir(parents=True, exist_ok=True)
     return p
 
-# ---------- Repository ----------
+# Repository
 class HabitRepo:
     """High-level API wrapping SQLAlchemy session operations."""
     def __init__(self, session: Optional[Session] = None) -> None:
@@ -79,7 +79,6 @@ class HabitRepo:
     def _session(self) -> Session:
         return self._external_session or SessionLocal()
 
-    # Schema
     def init_schema(self) -> None:
         create_schema()
 
@@ -139,7 +138,6 @@ class HabitRepo:
                 s.commit()
             except IntegrityError:
                 s.rollback()
-                # Already checked in that period → idempotent behavior
                 pass
             return p_start, p_end
 
@@ -190,7 +188,7 @@ class HabitRepo:
                 best_habit = h
         return best_habit, best
 
-    # Listing checks (for export/UI)
+    # Listing checks 
     def list_checks(self, name: Optional[str] = None) -> List[CheckORM]:
         with self._session() as s:
             q = select(CheckORM).order_by(CheckORM.period_start.asc())
@@ -246,3 +244,36 @@ class HabitRepo:
             for c in self.list_checks(name=name):
                 w.writerow([c.id, c.habit_id, _dt(c.ts), _dt(c.period_start), _dt(c.period_end)])
         return out
+    
+    def delete_habit(self, name: str) -> None:
+        with self._session() as s:
+            h = s.execute(select(HabitORM).where(HabitORM.name == name)).scalar_one_or_none()
+            if not h:
+                raise KeyError(f"Habit '{name}' not found")
+            s.delete(h)
+            s.commit()
+
+    def rename_habit(self, old_name: str, new_name: str) -> HabitORM:
+        new_name = new_name.strip()
+        with self._session() as s:
+            h = s.execute(select(HabitORM).where(HabitORM.name == old_name)).scalar_one_or_none()
+            if not h:
+                raise KeyError(f"Habit '{old_name}' not found")
+            h.name = new_name
+            try:
+                s.commit()
+            except IntegrityError as e:
+                s.rollback()
+                raise ValueError(f"Habit '{new_name}' already exists") from e
+            s.refresh(h)
+            return h
+        
+    def summary_streaks(self) -> List[Tuple[str, int]]:
+        """Return list of all habits with their current longest streaks."""
+        result = []
+        for h in self.list_all():
+            s = self.longest_streak_for(h.name)
+            result.append((h.name, s))
+        return result
+
+
