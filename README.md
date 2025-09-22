@@ -76,6 +76,13 @@ python -m habits.cli due
 python -m habits.cli streak "Drink water"
 python -m habits.cli streak-all
 
+# Summary of all streaks
+python -m habits.cli summary
+
+# Manage habits
+python -m habits.cli delete "Drink water"
+python -m habits.cli rename "Drink water" "Hydration"
+
 # Export data
 python -m habits.cli export-habits --format json --path export/habits.json
 python -m habits.cli export-checks --format csv  --path export/checks.csv
@@ -144,11 +151,12 @@ Longest streak calculation
 
 ## Roadmap
 
-Delete or rename habits (with cascade in checks)
+Delete or rename habits (Check)
 
-Summary analytics (show streak for every habit)
+Summary analytics (Check)
 
-Optional GUI (Streamlit dashboard)
+Optional GUI (Streamlit dashboard) (In Progress)
+
 
 
 
